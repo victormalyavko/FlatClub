@@ -1,3 +1,1 @@
-/**
- * Created by Alex Protasov.
- */
+alert('hello ' + document.location.href);
