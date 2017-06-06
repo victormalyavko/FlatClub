@@ -1,0 +1,13 @@
+#header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #fff;
+    z-index: 999;
+}
+
+#header #heading {
+    float: left;
+    width: 100%;
+}
