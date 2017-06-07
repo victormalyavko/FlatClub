@@ -17,6 +17,7 @@
     }
   ],
   "permissions": [
+    "tabs",
     "activeTab",
     "*://goppa.benivo.com/*",
     "*://flat-club.com/*"
