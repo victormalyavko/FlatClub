@@ -1,10 +1,11 @@
 var countOfPages = parseInt($("li[title^='Page']:last>a").html());
 
-function timeout() {
+function timeout(selector) {
     setTimeout(function () {
-        if ($("div[ng-hide='searchInProgress']:not(.ng-hide)").length != 0)
+        if ($(selector).length != 0)
             return;
-        timeout();
+        else
+            timeout(selector);
     }, 1000);
 }
 
@@ -14,21 +15,35 @@ for (var i = 0; i < countOfPages; i++) {
         arr.push($(value).attr("href"));
     });
     $("li[title='Next Page']>a")[0].click();
-    timeout();
+    timeout("div[ng-hide='searchInProgress']:not(.ng-hide)");
 }
 
-console.log(arr.length);
+var correctIds = [];
+var countOfFlats;
 
-// similar behavior as an HTTP redirect
-for (var i = 0; i < arr.length; i++) {
+if ((parseInt(myVar) == 0) || (parseInt(myVar) > arr.length))
+    countOfFlats = arr.length;
+else
+    countOfFlats = parseInt(myVar);
+
+
+for (var i = 0; i < countOfFlats; i++) {
     myWindow = window.open('https://www.flat-club.com' + arr[i]);
-    //  window.location.href = 'https://www.flat-club.com' + arr[i];
-    var valueOfLastCalendarUpdate = $("#flatViewHostInfo div:not([class]) span").parent().text().trim();
+
+    var valueOfLastCalendarUpdate;
+
+    myWindow.onload = function () {
+        valueOfLastCalendarUpdate = $('#flatViewHostInfo div:not([class]) span', myWindow.document).parent().text().trim();
+    }
+
+
     if (valueOfLastCalendarUpdate.includes('Today') || valueOfLastCalendarUpdate.includes('This week') || valueOfLastCalendarUpdate.includes('Yesterday')) {
-        arr[i]//add regex !
+        correctIds.push(arr[i] + valueOfLastCalendarUpdate);//add regex !
     }
     myWindow.close();
 }
+
+alert(correctIds);
 
 // $("div[class='col-md-6 col-lg-6 col-sm-12 col-xs-12 ng-scope'] .flat-container>a").each(function (index, value) {
 //     console.log($(value).attr("href"))
