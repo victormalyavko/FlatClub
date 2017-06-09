@@ -16,7 +16,8 @@
     {
       "matches": [ "http://*/*", "https://*/*" ],
       "css": [ "style.css" ],
-      "js":["jquery.js", "alert.js"]
+      "js":["jquery.js", "alert.js"],
+      "run_at": "document_end"
     }
   ],
   "permissions": [
