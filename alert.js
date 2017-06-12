@@ -1,11 +1,11 @@
 var countOfPages = parseInt($("li[title^='Page']:last>a").html());
 
-function timeout(selector) {
+function myTimeout(selector) {
     setTimeout(function () {
         if ($(selector).length != 0)
             return;
         else
-            timeout(selector);
+            myTimeout(selector);
     }, 1000);
 }
 
@@ -16,7 +16,7 @@ function collectAllFlatHrefs() {
             arr.push($(value).attr("href"));
         });
         $("li[title='Next Page']>a")[0].click();
-        timeout("div[ng-hide='searchInProgress']:not(.ng-hide)");
+        myTimeout("div[ng-hide='searchInProgress']:not(.ng-hide)");
     }
 
     return arr;
@@ -25,7 +25,7 @@ function collectAllFlatHrefs() {
 
 function z(index) {
     if (index === countOfFlats) {
-        alert(correctIds);
+        z1();
         return;
     }
 
@@ -42,6 +42,26 @@ function z(index) {
 
         z(index + 1);
     };
+}
+
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
+
+    while (currentTime + miliseconds >= new Date().getTime()) {
+    }
+}
+
+function waitForElement(window) {
+    if (window.document.$("a[href='/Admin/User/']").parent().attr('class') === 'active')
+        return;
+    else
+        sleep(1000);
+}
+
+function z1() {
+    var myWindow1 = window.open('https://goppa.benivo.com/Admin/User/editprofile/' + '277522');
+    waitForElement(myWindow1);
+    myWindow1.close();
 }
 
 var arr = collectAllFlatHrefs();
