@@ -39,7 +39,6 @@ function z(index) {
         }
 
         myWindow.close();
-
         z(index + 1);
     };
 }
@@ -51,16 +50,18 @@ function sleep(miliseconds) {
     }
 }
 
-function waitForElement(window) {
-    if (window.document.$("a[href='/Admin/User/']").parent().attr('class') === 'active')
-        return;
-    else
-        sleep(1000);
-}
 
 function z1() {
     var myWindow1 = window.open('https://goppa.benivo.com/Admin/User/editprofile/' + '277522');
-    waitForElement(myWindow1);
+    while (true) {
+        if ($("a[href='/Admin/User/']", myWindow1.document).parent().attr('class') === 'active') {
+            myWindow1.alert("!@##@$")
+            return;
+        }
+        else {
+            sleep(1000);
+        }
+    }
     myWindow1.close();
 }
 
