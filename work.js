@@ -55,7 +55,8 @@ function sleep(miliseconds) {
 
 function z1() {
     var array = event.data;
-    console.log(array);
+    console.log(array + "array !!");
+    console.log( "array !!");
 
     $("ul li a[href='#dashboard-suggest']")[0].click();
 
@@ -65,7 +66,8 @@ function z1() {
         $("input[class='flatID']").each(function (index, value) {
             allFlatIds.push($(value).val());
         });
-        console.log(allFlatIds);
+        console.log(allFlatIds + "Flat!!");
+        console.log("Flat!!");
         if (!contains.call(allFlatIds, array[i])) {
             $("button:contains('Add internal property')")[0].click();
             sleep(2000);
@@ -81,7 +83,7 @@ function z1() {
 
 function listener(event) {
     z1();
-    return;
+    throw new Error("Hard STOP");
 }
 
 if (window.addEventListener) {
