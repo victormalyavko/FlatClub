@@ -1,3 +1,23 @@
+/*function z1() {
+ var myWindow1 = window.open("https://goppa.benivo.com/Admin/User/editprofile/277522");
+
+ myWindow1.onload = function () {
+ //click suggest tab
+ myWindow1.alert("hi!");
+
+ };
+
+ myWindow1.postMessage("hi", "*");
+ }
+
+ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+ // sendResponse({farewell:"goodbye"}, function () {
+ alert("3432");
+ z1();
+ // });
+ });*/
+
+
 window.opener.postMessage("hi", "*");
 
 var contains = function (needle) {
@@ -43,7 +63,7 @@ function z1() {
     var allFlatIds = [];
 
     for (var i = 0; i < array.length; i++) {
-		sleep(3000);
+		sleep(2000);
         $("input[class='flatID']").each(function (index, value) {
             allFlatIds.push($(value).val());
         });
@@ -51,15 +71,15 @@ function z1() {
         console.log("Flat!!");
         if (!contains.call(allFlatIds, array[i])) {
             $("button:contains('Add internal property')")[0].click();
+			sleep(2000);
             $("li[class='ui-droppable fc-new-property'] input[class='flatID']").val(array[i]);
+			sleep(2000);
             $("li[class='ui-droppable fc-new-property'] button[class='btn btn-primary fc-internal-save']")[0].click();
         }
         allFlatIds = [];
     }
-	close();
     array = [];
 }
-
 
 function listener(event) {
     z1();
