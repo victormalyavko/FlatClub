@@ -5,25 +5,27 @@
   "description": "FlatClub filler",
   "version": "1.0.1",
 
-  "run_at": "document_end",
-
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["work.js"]
   },
 
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*" ],
       "css": [ "style.css" ],
-      "js":["jquery.js", "alert.js"],
+      "js":["jquery.js", "work.js"],
       "run_at": "document_end"
     }
   ],
   "permissions": [
     "tabs",
     "activeTab",
-    "*://goppa.benivo.com/*",
-    "*://flat-club.com/*"
+    "http://*/*",
+    "https://*/*"
   ]
 }

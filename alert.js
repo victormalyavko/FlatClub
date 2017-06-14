@@ -1,4 +1,6 @@
 var countOfPages = parseInt($("li[title^='Page']:last>a").html());
+var myWindow1;
+
 
 function timeout(selector) {
     setTimeout(function () {
@@ -22,10 +24,15 @@ function collectAllFlatHrefs() {
     return arr;
 }
 
+window.addEventListener("message", function(){
+    if (myWindow1) {
+        myWindow1.postMessage(correctIds, "*");
+    }
+});
 
 function z(index) {
     if (index === countOfFlats) {
-        alert(correctIds);
+        myWindow1 = window.open("https://goppa.benivo.com/Admin/User/editprofile/" + myVar1);
         return;
     }
 
@@ -35,7 +42,7 @@ function z(index) {
         var valueOfLastCalendarUpdate = $('#flatViewHostInfo div:not([class]) span', myWindow.document).parent().text().trim();
 
         if (valueOfLastCalendarUpdate.includes('Today') || valueOfLastCalendarUpdate.includes('This week') || valueOfLastCalendarUpdate.includes('Yesterday')) {
-            correctIds.push(arr[index]);//add regex !
+            correctIds.push(arr[index].match(/[0-9]+/g)[0]);//add regex !
         }
 
         myWindow.close();
@@ -44,12 +51,14 @@ function z(index) {
     };
 }
 
+
 var arr = collectAllFlatHrefs();
 var correctIds = [];
-var countOfFlats;
+var countOfFlats = 1;
 
 if ((parseInt(myVar) == 0) || (parseInt(myVar) > arr.length))
     countOfFlats = arr.length;
 else
     countOfFlats = parseInt(myVar);
 z(0);
+
