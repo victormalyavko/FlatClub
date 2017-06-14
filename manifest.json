@@ -10,10 +10,6 @@
     "default_popup": "popup.html"
   },
 
-  "background": {
-    "scripts": ["work.js"]
-  },
-
   "content_scripts": [
     {
       "matches": [ "http://*/*", "https://*/*" ],
