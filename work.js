@@ -1,52 +1,10 @@
-/*function z1() {
- var myWindow1 = window.open("https://goppa.benivo.com/Admin/User/editprofile/277522");
-
- myWindow1.onload = function () {
- //click suggest tab
- myWindow1.alert("hi!");
-
- };
-
- myWindow1.postMessage("hi", "*");
- }
-
- chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
- // sendResponse({farewell:"goodbye"}, function () {
- alert("3432");
- z1();
- // });
- });*/
-
-
 window.opener.postMessage("hi", "*");
 
-var contains = function (needle) {
-    // Per spec, the way to identify NaN is that it is not equal to itself
-    var findNaN = needle !== needle;
-    var indexOf;
-
-    if (!findNaN && typeof Array.prototype.indexOf === 'function') {
-        indexOf = Array.prototype.indexOf;
-    } else {
-        indexOf = function (needle) {
-            var i = -1, index = -1;
-
-            for (i = 0; i < this.length; i++) {
-                var item = this[i];
-
-                if ((findNaN && item !== item) || item === needle) {
-                    index = i;
-                    break;
-                }
-            }
-
-            return index;
-        };
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
+    while (currentTime + miliseconds >= new Date().getTime()) {
     }
-
-    return indexOf.call(this, needle) > -1;
-};
-
+}
 function sleep(miliseconds) {
     var currentTime = new Date().getTime();
     while (currentTime + miliseconds >= new Date().getTime()) {
@@ -55,39 +13,61 @@ function sleep(miliseconds) {
 
 function z1() {
     var array = event.data;
-    console.log(array + "array !!");
-    console.log( "array !!");
 
     $("ul li a[href='#dashboard-suggest']")[0].click();
 
     var allFlatIds = [];
+    $("input[class='flatID']").each(function (index, value) {
+        allFlatIds.push($(value).val());
+    });
 
-    for (var i = 0; i < array.length; i++) {
-		sleep(2000);
-        $("input[class='flatID']").each(function (index, value) {
-            allFlatIds.push($(value).val());
-        });
-        console.log(allFlatIds + "Flat!!");
-        console.log("Flat!!");
-        if (!contains.call(allFlatIds, array[i])) {
-            $("button:contains('Add internal property')")[0].click();
-			sleep(2000);
-            $("li[class='ui-droppable fc-new-property'] input[class='flatID']").val(array[i]);
-			sleep(2000);
-            $("li[class='ui-droppable fc-new-property'] button[class='btn btn-primary fc-internal-save']")[0].click();
+    var valid = $(array).not(allFlatIds).get();
+    var add = $("button:contains('Add internal property')")[0];
+
+    console.log(valid + " data");
+    var foo = document.getElementById('sortable1');
+
+    var index = 0;
+    var observer = new MutationObserver(
+        function (mutations, obs) {
+            mutations.forEach(function (mutation) {
+                var newNodes = mutation.addedNodes; // DOM NodeList
+                if (newNodes !== null) { //
+                    console.log('  "' + newNodes + '" added');
+                    console.log(index + " index");
+                    console.log(valid[index] + " value");
+                    $("li[class='ui-droppable fc-new-property'] input[class='flatID']").val(valid[index]);
+
+                    var save = $("li[class='ui-droppable fc-new-property'] button[class='btn btn-primary fc-internal-save']")[0];
+                    var saveObs = new MutationObserver(
+                        function (sMutations, sObs) {
+                            if (++index < valid.length) {
+                                add.click();
+                            } else {
+                                obs.disconnect();
+                            }
+                            sObs.disconnect();
+                        });
+                    saveObs.observe(save, {attributes: true});
+                    save.click();
+
+
+                }
+            });
         }
-        allFlatIds = [];
-    }
+    );
+
+    observer.observe(foo, {childList: true});
+    add.click();
+
     array = [];
 }
 
+
 function listener(event) {
+    window.removeEventListener("message", listener);
     z1();
 }
 
-if (window.addEventListener) {
-    window.addEventListener("message", listener);
-} else {
-    // IE8
-    window.attachEvent("onmessage", listener);
-}
+
+window.addEventListener("message", listener);

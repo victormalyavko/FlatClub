@@ -8,7 +8,7 @@ function timeout(selector) {
             return;
         else
             timeout(selector);
-    }, 1000);
+    }, 200);
 }
 
 function collectAllFlatHrefs() {
