@@ -14,57 +14,63 @@ function sleep(miliseconds) {
 function z1() {
     var array = event.data;
 
-    $("ul li a[href='#dashboard-suggest']")[0].click();
+    if (array.length == 0) {
+        window.alert("There are no Ids to add !");
+        window.close();
+        return
+    }
+    else {
+        $("ul li a[href='#dashboard-suggest']")[0].click();
 
-    var allFlatIds = [];
-    $("input[class='flatID']").each(function (index, value) {
-        allFlatIds.push($(value).val());
-    });
+        var allFlatIds = [];
+        $("input[class='flatID']").each(function (index, value) {
+            allFlatIds.push($(value).val());
+        });
 
-    var valid = $(array).not(allFlatIds).get();
-    var add = $("button:contains('Add internal property')")[0];
+        var valid = $(array).not(allFlatIds).get();
+        var add = $("button:contains('Add internal property')")[0];
 
-    console.log(valid + " data");
-    var foo = document.getElementById('sortable1');
+        console.log(valid + " data");
+        var foo = document.getElementById('sortable1');
 
-    var index = 0;
-    var observer = new MutationObserver(
-        function (mutations, obs) {
-            mutations.forEach(function (mutation) {
-                var newNodes = mutation.addedNodes; // DOM NodeList
-                if (newNodes !== null) { //
-                    console.log('  "' + newNodes + '" added');
-                    console.log(index + " index");
-                    console.log(valid[index] + " value");
-                    $("li[class='ui-droppable fc-new-property'] input[class='flatID']").val(valid[index]);
+        var index = 0;
+        var observer = new MutationObserver(
+            function (mutations, obs) {
+                mutations.forEach(function (mutation) {
+                    var newNodes = mutation.addedNodes; // DOM NodeList
+                    if (newNodes !== null) { //
+                        console.log('  "' + newNodes + '" added');
+                        console.log(index + " index");
+                        console.log(valid[index] + " value");
+                        $("li[class='ui-droppable fc-new-property'] input[class='flatID']").val(valid[index]);
 
-                    var save = $("li[class='ui-droppable fc-new-property'] button[class='btn btn-primary fc-internal-save']")[0];
-                    var saveObs = new MutationObserver(
-                        function (sMutations, sObs) {
-                            if (++index < valid.length) {
-                                add.click();
-                            } else {
-                                obs.disconnect();
-                            }
-                            sObs.disconnect();
-                        });
-                    saveObs.observe(save, {attributes: true});
-                    save.click();
+                        var save = $("li[class='ui-droppable fc-new-property'] button[class='btn btn-primary fc-internal-save']")[0];
+                        var saveObs = new MutationObserver(
+                            function (sMutations, sObs) {
+                                if (++index < valid.length) {
+                                    add.click();
+                                } else {
+                                    obs.disconnect();
+                                    window.alert("Flat Ids have been added !");
+                                    window.close();
+                                }
+                                sObs.disconnect();
+                            });
+                        saveObs.observe(save, {attributes: true});
+                        save.click();
+                    }
+                });
+            }
+        );
 
-
-                }
-            });
-        }
-    );
-
-    observer.observe(foo, {childList: true});
-    add.click();
-
-    array = [];
+        observer.observe(foo, {childList: true});
+        add.click();
+        array = [];
+    }
 }
 
-
 function listener(event) {
+    console.log(window)
     window.removeEventListener("message", listener);
     z1();
 }
