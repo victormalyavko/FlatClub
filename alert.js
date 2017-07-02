@@ -1,4 +1,7 @@
 var countOfPages = parseInt($("li[title^='Page']:last>a").html());
+if (typeof $("li[title^='Page']:last>a").html() === "undefined") {
+    countOfPages = 0;
+}
 var myWindow1;
 
 
@@ -13,18 +16,24 @@ function timeout(selector) {
 
 function collectAllFlatHrefs() {
     var arr = [];
-    for (var i = 0; i < countOfPages; i++) {
+    if (countOfPages == 0) {
         $("div[class='col-md-6 col-lg-6 col-sm-12 col-xs-12 ng-scope'] .flat-container>a").each(function (index, value) {
             arr.push($(value).attr("href"));
         });
-        $("li[title='Next Page']>a")[0].click();
-        timeout("div[ng-hide='searchInProgress']:not(.ng-hide)");
     }
+    else
+        for (var i = 0; i < countOfPages; i++) {
+            $("div[class='col-md-6 col-lg-6 col-sm-12 col-xs-12 ng-scope'] .flat-container>a").each(function (index, value) {
+                arr.push($(value).attr("href"));
+            });
+            $("li[title='Next Page']>a")[0].click();
+            timeout("div[ng-hide='searchInProgress']:not(.ng-hide)");
+        }
 
     return arr;
 }
 
-window.addEventListener("message", function(){
+window.addEventListener("message", function () {
     if (myWindow1) {
         myWindow1.postMessage(correctIds, "*");
     }
@@ -41,7 +50,9 @@ function z(index) {
     myWindow.onload = function () {
         var valueOfLastCalendarUpdate = $('#flatViewHostInfo div:not([class]) span', myWindow.document).parent().text().trim();
 
-        if (valueOfLastCalendarUpdate.includes('Today') || valueOfLastCalendarUpdate.includes('This week') || valueOfLastCalendarUpdate.includes('Yesterday')) {
+        console.log(valueOfLastCalendarUpdate)
+
+        if (valueOfLastCalendarUpdate.indexOf('Today') !== -1 || valueOfLastCalendarUpdate.indexOf('This week') !== -1 || valueOfLastCalendarUpdate.indexOf('This week') !== -1) {
             correctIds.push(arr[index].match(/[0-9]+/g)[0]);//add regex !
         }
 
